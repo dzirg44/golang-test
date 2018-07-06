@@ -1,0 +1,25 @@
+language: go
+go:
+- 1.8.x
+- 1.9.x
+
+before_install:
+- go get github.com/golang/lint/golint
+- go get github.com/gordonklaus/ineffassign
+- go get github.com/fzipp/gocyclo
+- go get github.com/client9/misspell/cmd/misspell
+- go get golang.org/x/tools/cmd/cover
+- go get github.com/mattn/goveralls
+
+script:
+- go test -v -covermode=count -coverprofile=coverage.out
+- GOOS=windows GOARCH=amd64 go build -o ci-test-windows-amd64.exe
+- GOOS=linux   GOARCH=amd64 go build -o ci-test-linux-amd64
+- goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+
+before_deploy:
+- zip ci-test-${TRAVIS_TAG}-windows-amd64.zip ci-test-windows-amd64.exe README.md
+- zip ci-test-${TRAVIS_TAG}-linux-amd64.zip ci-test-linux-amd64 README.md
+- sha256sum *zip > SHASUMS256.txt
+
+
