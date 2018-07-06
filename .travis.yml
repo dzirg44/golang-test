@@ -2,6 +2,7 @@ language: go
 go:
 - 1.8.x
 - 1.9.x
+- tip
 
 before_install:
 - go get github.com/golang/lint/golint
@@ -10,8 +11,12 @@ before_install:
 - go get github.com/client9/misspell/cmd/misspell
 - go get golang.org/x/tools/cmd/cover
 - go get github.com/mattn/goveralls
+- go get github.com/kisielk/errcheck
 
 script:
+- go test -race -v ./...
+- go vet ./...
+- errcheck ./...<Paste>
 - go test -v -covermode=count -coverprofile=coverage.out
 - GOOS=linux   GOARCH=amd64 go build -o ci-test-linux-amd64
 #- goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
