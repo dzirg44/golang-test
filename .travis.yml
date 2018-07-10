@@ -16,8 +16,8 @@ before_install:
 - go get golang.org/x/tools/cmd/cover
 - go get github.com/mattn/goveralls
 - go get github.com/kisielk/errcheck
-- go get honnef.co/go/unused/cmd/unused
-- go get -u github.com/mdempsky/unconvert
+- go get honnef.co/go/tools/cmd/unused
+- go get github.com/mdempsky/unconvert
 
 script:
 - go test -race -v ./...
