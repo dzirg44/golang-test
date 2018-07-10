@@ -1,10 +1,13 @@
 language: go
 go:
-- 1.8.x
 - 1.9.x
-- tip
+
+env:
+  DSPBASEDIR: "$TRAVIS_BUILD_DIR"
+  DOCKER_COMPOSE_VERSION: 1.11.2
 
 before_install:
+- go get honnef.co/go/tools/cmd/staticcheck
 - go get github.com/golang/lint/golint
 - go get github.com/gordonklaus/ineffassign
 - go get github.com/fzipp/gocyclo
@@ -23,6 +26,7 @@ script:
 - go test -v -covermode=count -coverprofile=coverage.out
 - gocyclo -over 14 .
 - GOOS=linux   GOARCH=amd64 go build -o ci-test-linux-amd64
+- ./linters.sh
 #- goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
 
 before_deploy:
